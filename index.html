@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rohan Shenoy</title>
+<meta name="description" content="Physicist at Caltech working on dark matter detectors, and on machine learning for the LHC. I build models for problems where the data is enormous, the noise is structural, and the answer has to survive scrutiny.">
+<meta property="og:title" content="Rohan Shenoy">
+<meta property="og:description" content="Physics at Caltech — dark matter detectors, and machine learning for the LHC.">
+<meta property="og:type" content="website">
+<!-- Social preview. If the site ends up somewhere other than rohanshenoy.github.io, update these URLs. -->
+<meta property="og:url" content="https://rohanshenoy.github.io/">
+<meta property="og:image" content="https://rohanshenoy.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rohan Shenoy">
+<meta name="twitter:description" content="Physics at Caltech — dark matter detectors, and machine learning for the LHC.">
+<meta name="twitter:image" content="https://rohanshenoy.github.io/og.png">
+<link rel="canonical" href="https://rohanshenoy.github.io/">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14130f" media="(prefers-color-scheme: dark)">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Rohan Shenoy",
+  "email": "mailto:rohan.shenoy2911@gmail.com",
+  "jobTitle": "PhD candidate, Physics",
+  "affiliation": { "@type": "CollegeOrUniversity", "name": "California Institute of Technology" },
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of California, San Diego" },
+  "url": "https://rohanshenoy.github.io/",
+  "sameAs": [
+    "https://www.linkedin.com/in/rohan-shenoy-7a9556202/",
+    "https://github.com/rohanshenoy"
+  ]
+}
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23b04a24'/%3E%3Cpath d='M12 46 Q 28 42 37 27 T 53 11' stroke='%23fbfaf7' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='53' cy='11' r='4.5' fill='%23fbfaf7'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#fbfaf7;
+    --panel:#f4f1eb;
+    --line:#e2ddd3;
+    --ink:#1c1a17;
+    --body:#4a453e;
+    --muted:#756e63;
+    --accent:#b04a24;
+    --accent-soft:#f2e4dd;
+    --shadow:28,26,23;
+    --max:720px;
+    --display:"Iowan Old Style","Palatino Linotype",Palatino,Charter,Georgia,"Times New Roman",serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#14130f;
+      --panel:#1c1a16;
+      --line:#2b2822;
+      --ink:#f0ece4;
+      --body:#c2bcb1;
+      --muted:#8a8378;
+      --accent:#e07a4f;
+      --accent-soft:#2c211b;
+      --shadow:0,0,0;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--body);
+    font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,sans-serif;
+    font-size:16.5px;line-height:1.72;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 26px}
+  a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent;
+    transition:color .15s,border-color .15s}
+  a:hover{border-bottom-color:var(--accent)}
+  strong{color:var(--ink);font-weight:600}
+  ::selection{background:var(--accent-soft);color:var(--ink)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+  /* ---------- top bar ---------- */
+  .topbar{padding:30px 0 0}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+  .name{font-weight:600;color:var(--ink);font-size:1rem;border:none}
+  .name:hover{color:var(--accent);border:none}
+  .topnav{display:flex;gap:20px;font-size:.88rem}
+  .topnav a{color:var(--muted)}
+  .topnav a:hover{color:var(--ink);border-bottom-color:var(--ink)}
+
+  /* ---------- intro ---------- */
+  .introwrap{position:relative;overflow:hidden}
+  #trails{
+    position:absolute;inset:0;width:100%;height:100%;
+    pointer-events:none;z-index:0;
+    -webkit-mask-image:linear-gradient(to bottom,#000 45%,transparent 92%);
+    mask-image:linear-gradient(to bottom,#000 45%,transparent 92%);
+  }
+  .intro{padding:56px 0 8px;position:relative;z-index:1}
+  .portrait{
+    width:104px;height:104px;border-radius:50%;object-fit:cover;
+    border:1px solid var(--line);margin-bottom:28px;display:block;background:var(--panel);
+    box-shadow:0 0 0 5px var(--accent-soft);
+  }
+  .intro h1{
+    font-family:var(--display);
+    font-size:clamp(1.7rem,4.4vw,2.2rem);line-height:1.22;letter-spacing:-.015em;
+    color:var(--ink);font-weight:600;margin-bottom:20px;
+  }
+  .intro p{margin-bottom:17px;max-width:62ch}
+
+  /* ---------- sections ---------- */
+  section{padding:46px 0}
+  .sechead{
+    display:flex;align-items:baseline;justify-content:space-between;
+    gap:16px;margin-bottom:22px;
+  }
+  h2{font-family:var(--display);font-size:1.28rem;font-weight:600;color:var(--ink);
+     letter-spacing:-.01em}
+  .sechead a{font-size:.85rem;color:var(--muted)}
+  .sechead a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+
+  /* ---------- work timeline ---------- */
+  .roles{position:relative}
+  .roles::before{
+    content:"";position:absolute;left:4px;top:26px;bottom:24px;width:1px;
+    background:linear-gradient(to bottom,var(--line) 0%,var(--line) 82%,transparent 100%);
+  }
+  .role{
+    position:relative;display:grid;grid-template-columns:1fr auto;gap:6px 20px;
+    padding:16px 0 16px 30px;
+  }
+  .role::before{
+    content:"";position:absolute;left:0;top:23px;width:9px;height:9px;border-radius:50%;
+    background:var(--bg);border:1.5px solid var(--accent);
+  }
+  .role-org{color:var(--ink);font-weight:600;font-size:.97rem}
+  .role-when{color:var(--muted);font-size:.85rem;text-align:right;white-space:nowrap}
+  .role-title{grid-column:1/-1;font-size:.92rem;color:var(--body);margin-top:-4px}
+  .role-note{grid-column:1/-1;font-size:.9rem;color:var(--muted);margin-top:5px}
+  @media(max-width:560px){
+    .role{grid-template-columns:1fr}
+    .role-when{text-align:left}
+  }
+
+  /* ---------- projects ---------- */
+  .proj{
+    display:block;padding:20px 22px;border:1px solid var(--line);
+    border-radius:11px;background:var(--panel);margin-bottom:13px;
+    transition:border-color .18s, transform .18s, box-shadow .18s;
+  }
+  .proj:hover{
+    border-color:var(--accent);transform:translateY(-2px);
+    box-shadow:0 12px 26px -16px rgba(var(--shadow),.4);
+  }
+  .proj.static:hover{border-color:var(--line);transform:none;box-shadow:none}
+  .metric{
+    font-size:.8rem;font-weight:600;color:var(--accent);
+    background:var(--accent-soft);padding:3px 10px;border-radius:20px;
+  }
+  .proj-top{display:flex;align-items:baseline;justify-content:space-between;gap:14px}
+  .proj-name{color:var(--ink);font-weight:650;font-size:1rem}
+  .proj-year{color:var(--muted);font-size:.83rem;white-space:nowrap}
+  .proj p{font-size:.92rem;margin-top:7px;color:var(--body)}
+  .proj-foot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:13px}
+  .chip{
+    font-size:.76rem;padding:2px 9px;border-radius:20px;
+    background:var(--bg);color:var(--muted);border:1px solid var(--line);
+  }
+  .live{
+    font-size:.8rem;font-weight:600;color:var(--accent);
+    background:var(--accent-soft);padding:3px 10px;border-radius:20px;
+  }
+
+  /* ---------- publications ---------- */
+  .pub{padding:14px 0;border-top:1px solid var(--line);font-size:.93rem}
+  .pub:first-of-type{border-top:none}
+  .pub-title{color:var(--ink);font-weight:600}
+  .pub-meta{color:var(--muted);font-size:.87rem;margin-top:2px}
+  .talks{font-size:.92rem;color:var(--muted);margin-top:20px}
+  .talks span{color:var(--ink)}
+
+  /* ---------- toolkit ---------- */
+  .kit{display:grid;grid-template-columns:130px 1fr;gap:10px 22px;font-size:.93rem}
+  .kit dt{color:var(--muted)}
+  .kit dd{color:var(--ink)}
+  @media(max-width:560px){.kit{grid-template-columns:1fr;gap:2px 0}.kit dd{margin-bottom:12px}}
+
+  /* ---------- outro / contact ---------- */
+  .outro p{margin-bottom:16px;max-width:62ch}
+  .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .links a{
+    font-size:.9rem;padding:8px 16px;border:1px solid var(--line);
+    border-radius:7px;color:var(--ink);background:var(--panel);
+  }
+  .links a:hover{border-color:var(--accent);color:var(--accent)}
+  footer{padding:40px 0 56px;font-size:.84rem;color:var(--muted)}
+
+  /* beamline divider: a hairline with a small collision marker at centre */
+  .rule{position:relative;height:1px;background:var(--line);margin:0}
+  .rule::before{
+    content:"";position:absolute;left:50%;top:50%;width:34px;height:1px;
+    transform:translate(-50%,-50%);
+    background:linear-gradient(to right,transparent,var(--muted) 30%,var(--muted) 70%,transparent);
+    opacity:.55;
+  }
+  .rule::after{
+    content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;
+    transform:translate(-50%,-50%) rotate(45deg);
+    background:var(--bg);border:1px solid var(--muted);
+  }
+
+  /* gentle scroll reveal — class added by JS, skipped under reduced motion */
+  @media (prefers-reduced-motion: no-preference){
+    .reveal{opacity:0;transform:translateY(12px);
+      transition:opacity .55s ease,transform .55s ease}
+    .reveal.in{opacity:1;transform:none}
+  }
+  /* ---------- print ---------- */
+  @media print{
+    :root{
+      --bg:#fff;--panel:#fff;--line:#ccc;--ink:#000;--body:#222;
+      --muted:#555;--accent:#8a3a1c;--accent-soft:#f2ece8;
+    }
+    .reveal{opacity:1 !important;transform:none !important}
+    #trails,.topnav,.skip{display:none !important}
+    body{font-size:12.5px;line-height:1.55}
+    section{padding:22px 0}
+    .proj{break-inside:avoid;page-break-inside:avoid;box-shadow:none !important;
+      border-color:#ccc !important;transform:none !important}
+    .role{break-inside:avoid;page-break-inside:avoid}
+    .pub{break-inside:avoid}
+    .portrait{box-shadow:none}
+    a{color:var(--accent)}
+  }
+
+  /* skip link: hidden until keyboard-focused */
+  .skip{
+    position:absolute;left:12px;top:-48px;z-index:10;
+    background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:0 0 8px 8px;
+    font-size:.85rem;border:none;transition:top .15s;
+  }
+  .skip:focus{top:0}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#top">Skip to content</a>
+
+<div class="topbar">
+  <div class="wrap">
+    <a href="#top" class="name">Rohan Shenoy</a>
+    <nav class="topnav">
+      <a href="#work">work</a>
+      <a href="#projects">projects</a>
+      <a href="#leadership">leadership</a>
+      <a href="#writing">papers</a>
+      <a href="resume.pdf">résumé</a>
+      <a href="CV.pdf">cv</a>
+    </nav>
+  </div>
+</div>
+
+<main id="top">
+
+  <div class="introwrap">
+  <canvas id="trails" aria-hidden="true"></canvas>
+  <div class="wrap intro">
+    <img class="portrait" src="portrait.jpg" alt="Rohan Shenoy"
+         onerror="this.style.display='none'">
+    <h1>Hey! Welcome to my website.</h1>
+    <p>
+      I'm a physicist by education, with a bachelor's from <strong>UCSD</strong>, currently
+      pursuing a PhD at <strong>Caltech</strong>.
+    </p>
+    <p>
+      I have a strong mind for solving problems, from particle physics to managing teams. My core
+      skills are communication, coordinating projects, and an approach to work that's hands-on and
+      detail-oriented.
+    </p>
+    <p>
+      My research sits at the intersection of particle physics and machine learning — I published a
+      first-author paper on a differentiable approximation to the earth mover's distance, used to
+      train the data-compression hardware for the LHC's high-luminosity upgrade. Outside the lab
+      I've run budgets and operations: <strong>Vice President</strong> of Caltech's first labor
+      union, <strong>Treasurer</strong> of the Graduate Student Council, and a board seat at a
+      student-run cooperative bookstore.
+    </p>
+    <p>
+      I'm looking for <strong>quant research, finance, and consulting</strong> roles on the
+      <strong>East Coast</strong> — <strong>summer 2027 internships</strong> now, and full-time
+      from <strong>summer 2028</strong>.
+    </p>
+  </div>
+  </div>
+
+  <div class="wrap"><div class="rule"></div></div>
+
+  <section id="work">
+    <div class="wrap">
+      <div class="sechead">
+        <h2>Work</h2>
+        <a href="resume.pdf">Résumé →</a>
+      </div>
+
+      <div class="roles">
+
+      <div class="role">
+        <div class="role-org">Caltech — Golwala Lab</div>
+        <div class="role-when">2023 – present</div>
+        <div class="role-title">PhD candidate, Physics — dark matter and detector R&amp;D</div>
+        <div class="role-note">
+          <strong>David and Ellen Lee Distinguished Fellow</strong> — awarded to Caltech's most
+          promising incoming students. Work on <strong>SuperCDMS</strong> and
+          <strong>RISQ</strong>; see below. Open to <strong>summer 2027 internships</strong>, and
+          to full-time industry roles from <strong>summer 2028</strong>.
+        </div>
+      </div>
+
+      <div class="role">
+        <div class="role-org">Duarte Lab, UC San Diego</div>
+        <div class="role-when">2021 – 2023</div>
+        <div class="role-title">Undergraduate Researcher — CMS Collaboration, LHC</div>
+        <div class="role-note">Geometric deep learning for the High Granularity Calorimeter, in
+          collaboration with Fermilab and CERN. Real-time compression and event selection across a
+          detector with over 6 million channels.</div>
+      </div>
+
+      <div class="role">
+        <div class="role-org">High Energy Phenomenology, UC San Diego</div>
+        <div class="role-when">2022 – 2023</div>
+        <div class="role-title">Undergraduate Researcher — with Prof. Benjamin Grinstein</div>
+        <div class="role-note">Phenomenological study of leptoquarks as an explanation for the
+          R(D*) anomaly in B meson decays.</div>
+      </div>
+
+      <div class="role">
+        <div class="role-org">University of California, San Diego</div>
+        <div class="role-when">2019 – 2023</div>
+        <div class="role-title">BS Physics — GPA 3.98</div>
+        <div class="role-note">Quantum field theory, graduate quantum mechanics, nuclear and atomic
+          physics; advanced linear algebra, group theory, complex analysis.</div>
+      </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <div class="wrap"><div class="rule"></div></div>
+
+  <section id="projects">
+    <div class="wrap">
+      <div class="sechead">
+        <h2>Projects</h2>
+        <a href="https://github.com/rohanshenoy" target="_blank" rel="noopener">GitHub →</a>
+      </div>
+
+      <div class="proj static">
+        <div class="proj-top">
+          <span class="proj-name">SuperCDMS — background modelling and limit setting</span>
+          <span class="proj-year">2024 – present</span>
+        </div>
+        <p>
+          SuperCDMS hunts low-mass dark matter using germanium and silicon crystals held at
+          <strong>15 millikelvin</strong>, two kilometres underground at SNOLAB. I'm building the
+          Python tool that turns detector data into a limit — an <strong>extended
+          maximum-likelihood fit</strong> comparing a candidate signal against every background in
+          the experiment (tritium, neutrons, coherent neutrino scattering, Compton events, surface
+          betas, radon exposure, cosmic rays), carrying the uncertainty in detector resolution and
+          energy yield as fitted nuisance parameters rather than fixed assumptions, and validating
+          the whole thing against Monte Carlo trial datasets generated across the parameter space.
+          The discipline is <strong>separating a small signal from a large, structured,
+          badly-behaved background</strong> — and being able to defend the separation afterwards.
+        </p>
+        <div class="proj-foot">
+          <span class="chip">Python</span><span class="chip">Maximum likelihood</span>
+          <span class="chip">Monte Carlo</span><span class="chip">Nuisance parameters</span>
+          <span class="chip">SNOLAB</span>
+        </div>
+      </div>
+
+      <div class="proj static">
+        <div class="proj-top">
+          <span class="proj-name">Blackbody photon diffraction in Geant4</span>
+          <span class="proj-year">2024 – present</span>
+        </div>
+        <p>
+          A cryogenic experiment is not photon-free: the surrounding fridge surfaces are warm
+          relative to the detector, and they radiate. That radiation adds shot noise to a
+          SuperCDMS sensor, and in
+          superconducting qubits the same photons break the Cooper pairs a transmon depends on —
+          but <strong>no end-to-end simulation of it exists</strong>. Geant4, the standard
+          particle-physics toolkit, propagates optical photons as rays, which fails precisely
+          here: blackbody wavelengths are comparable to the gaps between detector components, so
+          the photons <strong>diffract</strong>. I'm extending Geant4 to handle that, scripting
+          ANSYS HFSS from Python to solve the electromagnetic problem in each geometry and
+          converting the field solutions into transmission probabilities and angular emission
+          profiles the simulation can sample. Diffraction for a single frequency and geometry is
+          written and validated.
+        </p>
+        <div class="proj-foot">
+          <span class="chip">Geant4</span><span class="chip">ANSYS HFSS</span>
+          <span class="chip">Python</span><span class="chip">Electromagnetic simulation</span>
+          <span class="chip">Quantum hardware</span>
+        </div>
+      </div>
+
+      <a class="proj" href="https://arxiv.org/abs/2306.04712" target="_blank" rel="noopener">
+        <div class="proj-top">
+          <span class="proj-name">Differentiable earth mover's distance</span>
+          <span class="proj-year">2021 – 2023</span>
+        </div>
+        <p>
+          The EMD is the physically meaningful way to compare two energy distributions, but it's not
+          differentiable and standard implementations are too slow to train against. I trained a CNN
+          to approximate it — <strong>5% resolution</strong>, fast enough for the inner training
+          loop — then used it as the loss for the on-detector compression encoder. It outperformed
+          MSE-based training on physics performance. Published in <em>MLST</em>; presented at APS
+          April Meeting.
+        </p>
+        <div class="proj-foot">
+          <span class="live">Paper ↗</span>
+          <span class="chip">TensorFlow</span><span class="chip">CNNs</span>
+          <span class="chip">Optimal transport</span>
+        </div>
+      </a>
+
+      <a class="proj" href="https://github.com/rohanshenoy/EcoderGNN" target="_blank" rel="noopener">
+        <div class="proj-top">
+          <span class="proj-name">Graph neural networks for calorimeter latent space</span>
+          <span class="proj-year">2022 – 2023</span>
+        </div>
+        <p>
+          Reconstructing individual particles directly from the compressed latent space of the
+          calorimeter's on-chip encoder, using a GNN with object condensation loss. Reached
+          <strong>85% pileup mitigation accuracy</strong> in HL-LHC events with 200 simultaneous
+          collisions. Presented at the A3D3 annual meeting.
+        </p>
+        <div class="proj-foot">
+          <span class="live">Code ↗</span>
+          <span class="chip">PyTorch Geometric</span><span class="chip">GNNs</span>
+          <span class="chip">Object condensation</span>
+        </div>
+      </a>
+
+      <a class="proj" href="https://github.com/rohanshenoy/ECONAutoencoderStudy" target="_blank" rel="noopener">
+        <div class="proj-top">
+          <span class="proj-name">Autoencoder training for the HGCAL Level-1 trigger</span>
+          <span class="proj-year">2021 – 2023</span>
+        </div>
+        <p>
+          Improving the ASIC encoder that sits on the detector itself and decides, in real time,
+          which of 6 million channels' worth of data is worth keeping. Event-level selection on
+          Monte Carlo data with uproot and awkward; trigger simulation in CMSSW. Work done with
+          Fermilab; presented at the Fast Machine Learning for Science Workshop.
+        </p>
+        <div class="proj-foot">
+          <span class="live">Code ↗</span>
+          <span class="chip">CMSSW</span><span class="chip">uproot / awkward</span>
+          <span class="chip">Fermilab</span>
+        </div>
+      </a>
+
+      <a class="proj" href="https://docs.google.com/presentation/d/1rtWgaZ8oQt9VxP1_uUI_CgnpfrGgi8ciLzVP6xKLKkk/edit?usp=sharing" target="_blank" rel="noopener">
+        <div class="proj-top">
+          <span class="proj-name">Leptoquarks and the R(D*) anomaly</span>
+          <span class="proj-year">2022 – 2023</span>
+        </div>
+        <p>
+          Scalar leptoquarks as a candidate explanation for the excess in B → D*τν. Built the models
+          in FeynRules, simulated pp → b + c + τ + MET at the LHC with MadGraph_aMC@NLO, and checked
+          the results analytically at leading order. Found improved sensitivity in the
+          <em>m<sub>T</sub></em>(τ) tail relative to previous searches.
+        </p>
+        <div class="proj-foot">
+          <span class="live">Overview ↗</span>
+          <span class="chip">MadGraph</span><span class="chip">FeynRules</span>
+          <span class="chip">Monte Carlo</span>
+        </div>
+      </a>
+
+      <p class="talks" style="margin-top:20px">
+        Code for the EMD approximation lives at
+        <a href="https://github.com/rohanshenoy/Ecoder" target="_blank" rel="noopener">github.com/rohanshenoy/Ecoder</a>.
+      </p>
+
+    </div>
+  </section>
+
+  <div class="wrap"><div class="rule"></div></div>
+
+  <section id="leadership">
+    <div class="wrap">
+      <div class="sechead"><h2>Leadership &amp; operations</h2></div>
+
+      <div class="proj static">
+        <div class="proj-top">
+          <span class="proj-name">Treasurer — Caltech Graduate Student Council</span>
+          <span class="proj-year">2024 – 2025</span>
+        </div>
+        <p>
+          Administered the Council's <strong>$120,000 annual budget</strong> on behalf of Caltech's
+          graduate student body. Closed the year at a <strong>zero deficit — the first balanced
+          budget since the pandemic</strong>, after several years of shortfall.
+        </p>
+        <div class="proj-foot">
+          <span class="metric">$120K budget</span>
+          <span class="chip">Financial planning</span><span class="chip">Governance</span>
+        </div>
+      </div>
+
+      <div class="proj static">
+        <div class="proj-top">
+          <span class="proj-name">Vice President — CGPU-UAW, Local 2478</span>
+          <span class="proj-year">2025 – 2026</span>
+        </div>
+        <p>
+          Elected Vice President of <strong>Caltech Graduate Researchers and Postdocs United</strong>,
+          the first labor union in Caltech's history, representing <strong>2,000 graduate students
+          and postdoctoral researchers</strong>. Work centred on two things: federal science
+          funding, and the rights of international researchers, whose employment and immigration
+          status are tightly coupled and who therefore carry the most risk in any dispute.
+        </p>
+        <div class="proj-foot">
+          <span class="metric">2,000 represented</span>
+          <span class="chip">Negotiation</span><span class="chip">Stakeholder advocacy</span>
+          <span class="chip">Policy</span>
+        </div>
+      </div>
+
+      <div class="proj static">
+        <div class="proj-top">
+          <span class="proj-name">Board Member — Groundwork Books Collective</span>
+          <span class="proj-year">2019 – present</span>
+        </div>
+        <p>
+          Helping run a student-run workers' cooperative bookstore at UCSD — a real business with
+          inventory, staff and filings, operated without a manager. Restarted inventory purchasing
+          <strong>for the first time since 2009</strong>, recruited and trained the volunteer staff,
+          and handled the co-op's tax filings. Roughly <strong>1,000 hours</strong>.
+        </p>
+        <div class="proj-foot">
+          <span class="chip">Operations</span><span class="chip">Inventory</span>
+          <span class="chip">Tax filing</span><span class="chip">Recruitment</span>
+        </div>
+      </div>
+
+      <div class="proj static">
+        <div class="proj-top">
+          <span class="proj-name">Member — ARMS, Advocating for and Representing Minority
+            Students</span>
+          <span class="proj-year">2021 – 2023</span>
+        </div>
+        <p>
+          Started the effort inside UCSD's physics department to build a better learning
+          environment for all students.
+        </p>
+        <div class="proj-foot">
+          <span class="chip">Department policy</span><span class="chip">Advocacy</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="wrap"><div class="rule"></div></div>
+
+  <section id="writing">
+    <div class="wrap">
+      <div class="sechead"><h2>Papers &amp; talks</h2></div>
+
+      <div class="pub">
+        <div class="pub-title">
+          <a href="https://doi.org/10.1088/2632-2153/ad1139" target="_blank" rel="noopener">Differentiable earth mover's distance
+          for data compression at the high-luminosity LHC</a>
+        </div>
+        <div class="pub-meta">
+          Shenoy, Duarte, Herwig, Hirschauer, Noonan, Pierini, Tran, Mantilla Suarez —
+          <em>Machine Learning: Science and Technology</em> <strong>4</strong>, 045058 (2023).
+          <a href="https://arxiv.org/abs/2306.04712" target="_blank" rel="noopener">arXiv:2306.04712</a>
+        </div>
+      </div>
+
+      <p class="talks">
+        Poster at the <span>Radiation Impact on Superconducting Qubits (RISQ)</span> workshop
+        (2026), on the blackbody photon simulation above.
+      </p>
+
+      <p class="talks">
+        Earlier talks and posters at the
+        <a href="https://meetings.aps.org/Meeting/APR22/Session/Q09.8" target="_blank" rel="noopener">APS April Meeting</a> (2022),
+        the <a href="https://indico.cern.ch/event/1156222/contributions/5062785/attachments/2522928/4338593/Final_Shenoy_FAST_ML_Oct_22_Presentation.pdf" target="_blank" rel="noopener">Fast
+        Machine Learning for Science Workshop</a> (2022), and the
+        <a href="https://drive.google.com/file/d/1FaHZtlzT1x9sldu6eUQgyzC606_8HrYH/view?usp=sharing" target="_blank" rel="noopener">A3D3
+        Institute Annual Meeting</a> (2022).
+      </p>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="rule"></div></div>
+
+  <section id="toolkit">
+    <div class="wrap">
+      <div class="sechead"><h2>Toolkit</h2></div>
+      <dl class="kit">
+        <dt>Languages</dt>
+        <dd>Python, MATLAB, Mathematica, Java</dd>
+        <dt>ML</dt>
+        <dd>PyTorch, PyTorch Geometric, TensorFlow — CNNs, graph neural networks, autoencoders,
+            custom differentiable losses</dd>
+        <dt>Data</dt>
+        <dd>NumPy, uproot, awkward, coffea; Monte Carlo event samples at TB scale</dd>
+        <dt>Physics</dt>
+        <dd>CMSSW, CMS Open Data, MadGraph_aMC@NLO, MadAnalysis, FeynRules</dd>
+        <dt>Other</dt>
+        <dd>Git, GitLab, LaTeX</dd>
+      </dl>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="rule"></div></div>
+
+  <section class="outro" id="contact">
+    <div class="wrap">
+      <div class="sechead"><h2>Otherwise</h2></div>
+      <p>
+        A decent share of my time outside research goes to organizing — the
+        <a href="https://groundworkbooks.org" target="_blank" rel="noopener">Groundwork Books</a> board, and the union at Caltech.
+        Both are listed above, and both are the reason I'm comfortable in a room where nobody wants
+        to hear about detectors.
+      </p>
+      <p>
+        Most of the rest of my time goes to reading and cooking. Right now that's Jung's
+        <em>Modern Man in Search of a Soul</em>; otherwise history, philosophy and religion, with
+        <em>Foreign Affairs</em> and the <em>FT</em> for whatever is happening this week.
+      </p>
+      <p>
+        If any of this overlaps with what you're working on, or you want to argue about optimal
+        transport, please say hi.
+      </p>
+      <div class="links">
+        <a href="mailto:rohan.shenoy2911@gmail.com">rohan.shenoy2911@gmail.com</a>
+        <a href="https://www.linkedin.com/in/rohan-shenoy-7a9556202/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/rohanshenoy" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">© <span id="yr"></span> Rohan Shenoy</div>
+</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* Gentle scroll reveal for sections. Class is only added when JS runs and motion
+   is allowed, so content is never hidden if either is missing. */
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!('IntersectionObserver' in window)) return;
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+    });
+  }, { rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('main section').forEach(function (s) {
+    s.classList.add('reveal');
+    obs.observe(s);
+  });
+})();
+
+/* Decorative background for the intro: a bubble-chamber event display.
+   Collisions produce sprays of charged tracks from a shared vertex; positive and
+   negative particles curve opposite ways in the field, lower-momentum tracks
+   curve harder, and some decay in flight with a visible kink. Deliberately
+   faint — it should read as texture, not as a graphic. Pauses off-screen;
+   disabled under reduced-motion. */
+(function () {
+  var canvas = document.getElementById('trails');
+  if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (canvas) canvas.style.display = 'none';
+    return;
+  }
+
+  var ctx = canvas.getContext('2d');
+  var W = 0, H = 0, tracks = [], flashes = [], raf = null, rgb = '176,74,36';
+
+  // Pull the accent colour out of CSS so light/dark mode stay in sync.
+  function readAccent() {
+    var v = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+    var m = v.match(/^#?([0-9a-f]{6})$/i);
+    if (m) {
+      var n = parseInt(m[1], 16);
+      rgb = [(n >> 16) & 255, (n >> 8) & 255, n & 255].join(',');
+    }
+  }
+
+  function resize() {
+    var dpr = window.devicePixelRatio || 1;
+    var r = canvas.getBoundingClientRect();
+    W = r.width; H = r.height;
+    canvas.width = Math.max(1, W * dpr);
+    canvas.height = Math.max(1, H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  // One collision: several charged tracks share a vertex.
+  function collide(x, y, big) {
+    var n = big ? 4 + Math.floor(Math.random() * 3) : 2 + Math.floor(Math.random() * 2);
+    var base = Math.random() * Math.PI * 2;
+    for (var i = 0; i < n; i++) {
+      var speed = 0.5 + Math.random() * 1.3;          // momentum
+      var charge = Math.random() < 0.5 ? 1 : -1;      // sets the sense of curvature
+      tracks.push({
+        x: x, y: y,
+        a: base + (i / n) * Math.PI * 2 + (Math.random() - 0.5) * 0.9,
+        curve: charge * (0.012 + 0.045 / speed) * (0.55 + Math.random() * 0.9),
+        speed: speed,
+        life: 0,
+        max: 100 + Math.random() * 160,
+        kink: Math.random() < 0.3 ? Math.round(30 + Math.random() * 60) : -1,
+        pts: [[x, y]]
+      });
+    }
+    flashes.push({ x: x, y: y, age: 0 });
+  }
+
+  function spawn() {
+    collide(W * (0.1 + Math.random() * 0.8),
+            H * (0.1 + Math.random() * 0.8),
+            Math.random() < 0.4);
+  }
+
+  function step() {
+    ctx.clearRect(0, 0, W, H);
+
+    // vertex flashes: a brief expanding ring where the collision happened
+    for (var f = flashes.length - 1; f >= 0; f--) {
+      var v = flashes[f];
+      v.age++;
+      var k = 1 - v.age / 28;
+      if (k <= 0) { flashes.splice(f, 1); continue; }
+      ctx.beginPath();
+      ctx.arc(v.x, v.y, 2 + (1 - k) * 8, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(' + rgb + ',' + (k * 0.25).toFixed(3) + ')';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(v.x, v.y, 1.6, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + rgb + ',' + (k * 0.45).toFixed(3) + ')';
+      ctx.fill();
+    }
+
+    for (var i = tracks.length - 1; i >= 0; i--) {
+      var t = tracks[i];
+      t.a += t.curve;          // Lorentz force: constant curvature
+      t.speed *= 0.994;        // energy loss to the medium
+      t.x += Math.cos(t.a) * t.speed;
+      t.y += Math.sin(t.a) * t.speed;
+      t.life++;
+
+      // decay in flight: the track kinks once, sheds energy, curves anew
+      if (t.life === t.kink) {
+        t.a += (Math.random() - 0.5) * 1.6;
+        t.curve = (Math.random() < 0.5 ? 1 : -1) * (0.02 + Math.random() * 0.05);
+        t.speed *= 0.7;
+        if (Math.random() < 0.5) flashes.push({ x: t.x, y: t.y, age: 10 });
+      }
+
+      t.pts.push([t.x, t.y]);
+      if (t.pts.length > 90) t.pts.shift();
+
+      var fade = 1 - t.life / t.max;
+      if (fade <= 0 || t.x < -80 || t.x > W + 80 || t.y < -80 || t.y > H + 80) {
+        tracks.splice(i, 1);
+        continue;
+      }
+
+      ctx.beginPath();
+      ctx.moveTo(t.pts[0][0], t.pts[0][1]);
+      for (var p = 1; p < t.pts.length; p++) ctx.lineTo(t.pts[p][0], t.pts[p][1]);
+      ctx.strokeStyle = 'rgba(' + rgb + ',' + (fade * 0.16).toFixed(3) + ')';
+      ctx.lineWidth = 0.7 + Math.min(t.speed, 1.6) * 0.4;   // heavier line = more momentum
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(t.x, t.y, 1.2, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + rgb + ',' + (fade * 0.38).toFixed(3) + ')';
+      ctx.fill();
+    }
+
+    if (tracks.length < 22 && Math.random() < 0.03) spawn();
+    raf = requestAnimationFrame(step);
+  }
+
+  /* Cursor interaction: the pointer behaves like a charged particle passing
+     through the chamber — moving through the intro sheds faint ionization
+     tracks, and clicking empty space triggers a collision at that point.
+     Listeners sit on the wrapper (the canvas ignores pointer events), nothing
+     is prevented, so links, text selection and scrolling are untouched. */
+  var wrap = document.querySelector('.introwrap');
+  var lastT = 0, lx = -1, ly = -1;
+
+  function local(e) {
+    var r = canvas.getBoundingClientRect();
+    return [e.clientX - r.left, e.clientY - r.top];
+  }
+
+  wrap.addEventListener('pointermove', function (e) {
+    var p = local(e), x = p[0], y = p[1];
+    if (lx < 0) { lx = x; ly = y; return; }
+    var moved = Math.hypot(x - lx, y - ly);
+    var now = performance.now();
+    if (moved > 16) {
+      if (now - lastT > 110 && tracks.length < 40) {
+        lastT = now;
+        var ang = Math.atan2(y - ly, x - lx) + (Math.random() - 0.5) * 0.7;
+        tracks.push({
+          x: x, y: y, a: ang,
+          curve: (Math.random() < 0.5 ? 1 : -1) * (0.025 + Math.random() * 0.04),
+          speed: 0.9 + Math.random() * 0.8,
+          life: 0, max: 55 + Math.random() * 55, kink: -1,
+          pts: [[x, y]]
+        });
+      }
+      lx = x; ly = y;
+    }
+  });
+
+  wrap.addEventListener('pointerdown', function (e) {
+    if (e.target.closest('a')) return;           // never hijack a link
+    if (tracks.length > 46) return;
+    var p = local(e);
+    collide(p[0], p[1], true);
+  });
+
+  readAccent();
+  resize();
+  for (var k = 0; k < 3; k++) spawn();
+
+  window.addEventListener('resize', resize);
+  var scheme = window.matchMedia('(prefers-color-scheme: dark)');
+  (scheme.addEventListener ? scheme.addEventListener.bind(scheme, 'change') : scheme.addListener.bind(scheme))(readAccent);
+
+  new IntersectionObserver(function (e) {
+    if (e[0].isIntersecting) { if (!raf) raf = requestAnimationFrame(step); }
+    else if (raf) { cancelAnimationFrame(raf); raf = null; }
+  }).observe(canvas);
+})();
+</script>
+</body>
+</html>
