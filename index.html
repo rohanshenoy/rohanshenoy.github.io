@@ -25,7 +25,7 @@
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Rohan Shenoy",
-  "email": "mailto:rohan.shenoy2911@gmail.com",
+  "email": "mailto:rshenoy@caltech.edu",
   "jobTitle": "PhD candidate, Physics",
   "affiliation": { "@type": "CollegeOrUniversity", "name": "California Institute of Technology" },
   "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of California, San Diego" },
@@ -255,8 +255,10 @@
       <a href="#projects">projects</a>
       <a href="#leadership">leadership</a>
       <a href="#writing">papers</a>
+      <a href="#honors">honors</a>
       <a href="resume.pdf">résumé</a>
       <a href="CV.pdf">cv</a>
+      <a href="#contact">contact</a>
     </nav>
   </div>
 </div>
@@ -307,13 +309,12 @@
 
       <div class="role">
         <div class="role-org">Caltech — Golwala Lab</div>
-        <div class="role-when">2023 – present</div>
+        <div class="role-when">2024 – present</div>
         <div class="role-title">PhD candidate, Physics — dark matter and detector R&amp;D</div>
         <div class="role-note">
           <strong>David and Ellen Lee Distinguished Fellow</strong> — awarded to Caltech's most
-          promising incoming students. Work on <strong>SuperCDMS</strong> and
-          <strong>RISQ</strong>; see below. Open to <strong>summer 2027 internships</strong>, and
-          to full-time industry roles from <strong>summer 2028</strong>.
+          promising incoming students. Advisor: Sunil Golwala. Work on <strong>SuperCDMS</strong>;
+          see below.
         </div>
       </div>
 
@@ -358,12 +359,12 @@
 
       <div class="proj static">
         <div class="proj-top">
-          <span class="proj-name">SuperCDMS — background modelling and limit setting</span>
+          <span class="proj-name">SuperCDMS — background modeling and limit setting</span>
           <span class="proj-year">2024 – present</span>
         </div>
         <p>
           SuperCDMS hunts low-mass dark matter using germanium and silicon crystals held at
-          <strong>15 millikelvin</strong>, two kilometres underground at SNOLAB. I'm building the
+          <strong>15 millikelvin</strong>, two kilometers underground at SNOLAB. I'm building the
           Python tool that turns detector data into a limit — an <strong>extended
           maximum-likelihood fit</strong> comparing a candidate signal against every background in
           the experiment (tritium, neutrons, coherent neutrino scattering, Compton events, surface
@@ -371,7 +372,7 @@
           energy yield as fitted nuisance parameters rather than fixed assumptions, and validating
           the whole thing against Monte Carlo trial datasets generated across the parameter space.
           The discipline is <strong>separating a small signal from a large, structured,
-          badly-behaved background</strong> — and being able to defend the separation afterwards.
+          poorly-behaved background</strong> — and being able to defend the separation afterwards.
         </p>
         <div class="proj-foot">
           <span class="chip">Python</span><span class="chip">Maximum likelihood</span>
@@ -382,7 +383,7 @@
 
       <div class="proj static">
         <div class="proj-top">
-          <span class="proj-name">Blackbody photon diffraction in Geant4</span>
+          <span class="proj-name">Blackbody photon diffraction in GEANT4</span>
           <span class="proj-year">2024 – present</span>
         </div>
         <p>
@@ -390,23 +391,23 @@
           relative to the detector, and they radiate. That radiation adds shot noise to a
           SuperCDMS sensor, and in
           superconducting qubits the same photons break the Cooper pairs a transmon depends on —
-          but <strong>no end-to-end simulation of it exists</strong>. Geant4, the standard
+          but <strong>no end-to-end simulation of it exists</strong>. GEANT4, the standard
           particle-physics toolkit, propagates optical photons as rays, which fails precisely
           here: blackbody wavelengths are comparable to the gaps between detector components, so
-          the photons <strong>diffract</strong>. I'm extending Geant4 to handle that, scripting
+          the photons <strong>diffract</strong>. I'm extending GEANT4 to handle that, scripting
           ANSYS HFSS from Python to solve the electromagnetic problem in each geometry and
           converting the field solutions into transmission probabilities and angular emission
           profiles the simulation can sample. Diffraction for a single frequency and geometry is
           written and validated.
         </p>
         <div class="proj-foot">
-          <span class="chip">Geant4</span><span class="chip">ANSYS HFSS</span>
+          <span class="chip">GEANT4</span><span class="chip">ANSYS HFSS</span>
           <span class="chip">Python</span><span class="chip">Electromagnetic simulation</span>
           <span class="chip">Quantum hardware</span>
         </div>
       </div>
 
-      <a class="proj" href="https://arxiv.org/abs/2306.04712" target="_blank" rel="noopener">
+      <div class="proj static">
         <div class="proj-top">
           <span class="proj-name">Differentiable earth mover's distance</span>
           <span class="proj-year">2021 – 2023</span>
@@ -420,11 +421,12 @@
           April Meeting.
         </p>
         <div class="proj-foot">
-          <span class="live">Paper ↗</span>
+          <a class="live" href="https://arxiv.org/abs/2306.04712" target="_blank" rel="noopener">Paper ↗</a>
+          <a class="live" href="https://github.com/rohanshenoy/Ecoder" target="_blank" rel="noopener">Code ↗</a>
           <span class="chip">TensorFlow</span><span class="chip">CNNs</span>
           <span class="chip">Optimal transport</span>
         </div>
-      </a>
+      </div>
 
       <a class="proj" href="https://github.com/rohanshenoy/EcoderGNN" target="_blank" rel="noopener">
         <div class="proj-top">
@@ -451,7 +453,7 @@
         </div>
         <p>
           Improving the ASIC encoder that sits on the detector itself and decides, in real time,
-          which of 6 million channels' worth of data is worth keeping. Event-level selection on
+          which of over 6 million channels' worth of data is worth keeping. Event-level selection on
           Monte Carlo data with uproot and awkward; trigger simulation in CMSSW. Work done with
           Fermilab; presented at the Fast Machine Learning for Science Workshop.
         </p>
@@ -479,12 +481,6 @@
           <span class="chip">Monte Carlo</span>
         </div>
       </a>
-
-      <p class="talks" style="margin-top:20px">
-        Code for the EMD approximation lives at
-        <a href="https://github.com/rohanshenoy/Ecoder" target="_blank" rel="noopener">github.com/rohanshenoy/Ecoder</a>.
-      </p>
-
     </div>
   </section>
 
@@ -493,6 +489,25 @@
   <section id="leadership">
     <div class="wrap">
       <div class="sechead"><h2>Leadership &amp; operations</h2></div>
+
+      <div class="proj static">
+        <div class="proj-top">
+          <span class="proj-name">Vice President — CGPU-UAW, Local 2478</span>
+          <span class="proj-year">2025 – 2026</span>
+        </div>
+        <p>
+          Elected Vice President of <strong>Caltech Graduate Researchers and Postdocs United</strong>,
+          the first labor union in Caltech's history, representing <strong>2,000 graduate students
+          and postdoctoral researchers</strong>. Work centered on two things: federal science
+          funding, and the rights of international researchers, whose employment and immigration
+          status are tightly coupled and who therefore carry the most risk in any dispute.
+        </p>
+        <div class="proj-foot">
+          <span class="metric">2,000 represented</span>
+          <span class="chip">Negotiation</span><span class="chip">Stakeholder advocacy</span>
+          <span class="chip">Policy</span>
+        </div>
+      </div>
 
       <div class="proj static">
         <div class="proj-top">
@@ -507,25 +522,6 @@
         <div class="proj-foot">
           <span class="metric">$120K budget</span>
           <span class="chip">Financial planning</span><span class="chip">Governance</span>
-        </div>
-      </div>
-
-      <div class="proj static">
-        <div class="proj-top">
-          <span class="proj-name">Vice President — CGPU-UAW, Local 2478</span>
-          <span class="proj-year">2025 – 2026</span>
-        </div>
-        <p>
-          Elected Vice President of <strong>Caltech Graduate Researchers and Postdocs United</strong>,
-          the first labor union in Caltech's history, representing <strong>2,000 graduate students
-          and postdoctoral researchers</strong>. Work centred on two things: federal science
-          funding, and the rights of international researchers, whose employment and immigration
-          status are tightly coupled and who therefore carry the most risk in any dispute.
-        </p>
-        <div class="proj-foot">
-          <span class="metric">2,000 represented</span>
-          <span class="chip">Negotiation</span><span class="chip">Stakeholder advocacy</span>
-          <span class="chip">Policy</span>
         </div>
       </div>
 
@@ -548,7 +544,7 @@
 
       <div class="proj static">
         <div class="proj-top">
-          <span class="proj-name">Member — ARMS, Advocating for and Representing Minority
+          <span class="proj-name">Organizer — ARMS, Advocating for and Representing Minority
             Students</span>
           <span class="proj-year">2021 – 2023</span>
         </div>
@@ -600,19 +596,47 @@
 
   <div class="wrap"><div class="rule"></div></div>
 
+  <section id="honors">
+    <div class="wrap">
+      <div class="sechead"><h2>Honors</h2></div>
+
+      <div class="pub">
+        <div class="pub-title">David and Ellen Lee Distinguished Fellow <span class="pub-meta">· 2023</span></div>
+        <div class="pub-meta">Caltech fellowship for its most promising incoming graduate students, $46,500</div>
+      </div>
+      <div class="pub">
+        <div class="pub-title">Undergraduate Summer Research Award <span class="pub-meta">· 2022</span></div>
+        <div class="pub-meta">For graph neural networks with object condensation loss for the HGCAL Level-1 Trigger, $4,000</div>
+      </div>
+      <div class="pub">
+        <div class="pub-title">UC San Diego Chair's Challenge Award <span class="pub-meta">· 2022</span></div>
+        <div class="pub-meta">Travel award to present research, $500</div>
+      </div>
+      <div class="pub">
+        <div class="pub-title">TRELS Scholarship <span class="pub-meta">· 2021</span></div>
+        <div class="pub-meta">For improving autoencoder performance in the High Granularity Calorimeter, $1,000</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="rule"></div></div>
+
   <section id="toolkit">
     <div class="wrap">
       <div class="sechead"><h2>Toolkit</h2></div>
       <dl class="kit">
+        <dt>Statistics</dt>
+        <dd>Extended maximum-likelihood fitting, nuisance-parameter treatment of systematics,
+            Monte Carlo methods, limit setting, optimal transport</dd>
         <dt>Languages</dt>
         <dd>Python, MATLAB, Mathematica, Java</dd>
         <dt>ML</dt>
         <dd>PyTorch, PyTorch Geometric, TensorFlow — CNNs, graph neural networks, autoencoders,
             custom differentiable losses</dd>
         <dt>Data</dt>
-        <dd>NumPy, uproot, awkward, coffea; Monte Carlo event samples at TB scale</dd>
-        <dt>Physics</dt>
-        <dd>CMSSW, CMS Open Data, MadGraph_aMC@NLO, MadAnalysis, FeynRules</dd>
+        <dd>NumPy, uproot, awkward, coffea</dd>
+        <dt>Simulation</dt>
+        <dd>GEANT4, ANSYS HFSS, CMSSW, CMS Open Data, MadGraph_aMC@NLO, MadAnalysis, FeynRules</dd>
         <dt>Other</dt>
         <dd>Git, GitLab, LaTeX</dd>
       </dl>
@@ -629,7 +653,7 @@
         international relations.
       </p>
       <div class="links">
-        <a href="mailto:rohan.shenoy2911@gmail.com">rohan.shenoy2911@gmail.com</a>
+        <a href="mailto:rshenoy@caltech.edu">rshenoy@caltech.edu</a>
         <a href="https://www.linkedin.com/in/rohan-shenoy-7a9556202/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://github.com/rohanshenoy" target="_blank" rel="noopener">GitHub</a>
       </div>
