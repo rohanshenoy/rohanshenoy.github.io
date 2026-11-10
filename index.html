@@ -49,6 +49,7 @@
     --accent-soft:#f2e4dd;
     --shadow:28,26,23;
     --max:720px;
+    color-scheme:light dark;
     --display:"Iowan Old Style","Palatino Linotype",Palatino,Charter,Georgia,"Times New Roman",serif;
   }
   @media (prefers-color-scheme: dark){
@@ -65,8 +66,9 @@
     }
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}
   body{
+    padding-top:14px;
     background:var(--bg);color:var(--body);
     font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,sans-serif;
     font-size:16.5px;line-height:1.72;-webkit-font-smoothing:antialiased;
@@ -80,13 +82,33 @@
   :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
 
   /* ---------- top bar ---------- */
-  .topbar{padding:30px 0 0}
-  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
-  .name{font-weight:600;color:var(--ink);font-size:1rem;border:none}
+  .topbar{
+    position:sticky;top:0;z-index:5;padding:14px 0;
+    background:var(--bg);
+    background:color-mix(in srgb,var(--bg) 84%,transparent);
+    -webkit-backdrop-filter:saturate(1.3) blur(10px);backdrop-filter:saturate(1.3) blur(10px);
+    border-bottom:1px solid transparent;transition:border-color .2s;
+  }
+  .topbar.stuck{border-bottom-color:var(--line)}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:18px}
+  .name{font-weight:600;color:var(--ink);font-size:1rem;border:none;flex:none}
   .name:hover{color:var(--accent);border:none}
-  .topnav{display:flex;gap:20px;font-size:.88rem}
-  .topnav a{color:var(--muted)}
+  .topnav{position:relative;display:flex;gap:20px;font-size:.88rem}
+  .topnav a{color:var(--muted);flex:none}
   .topnav a:hover{color:var(--ink);border-bottom-color:var(--ink)}
+  .topnav a[aria-current]{color:var(--ink);border-bottom-color:var(--accent)}
+  /* narrow screens: one row; the nav scrolls sideways under soft edge fades */
+  @media(max-width:720px){
+    .topnav{
+      flex:1;min-width:0;overflow-x:auto;white-space:nowrap;
+      padding:3px 16px;margin-right:-10px;
+      scrollbar-width:none;-webkit-overflow-scrolling:touch;
+      -webkit-mask-image:linear-gradient(to right,transparent,#000 16px,#000 calc(100% - 24px),transparent);
+      mask-image:linear-gradient(to right,transparent,#000 16px,#000 calc(100% - 24px),transparent);
+    }
+    .topnav::-webkit-scrollbar{display:none}
+  }
+  section[id]{scroll-margin-top:34px}
 
   /* ---------- intro ---------- */
   .introwrap{position:relative;overflow:hidden}
@@ -96,7 +118,7 @@
     -webkit-mask-image:linear-gradient(to bottom,#000 45%,transparent 92%);
     mask-image:linear-gradient(to bottom,#000 45%,transparent 92%);
   }
-  .intro{padding:56px 0 8px;position:relative;z-index:1}
+  .intro{padding-top:44px;padding-bottom:8px;position:relative;z-index:1}
   .portrait{
     width:104px;height:104px;border-radius:50%;object-fit:cover;
     border:1px solid var(--line);margin-bottom:28px;display:block;background:var(--panel);
@@ -171,6 +193,8 @@
     font-size:.8rem;font-weight:600;color:var(--accent);
     background:var(--accent-soft);padding:3px 10px;border-radius:20px;
   }
+  a.live{border:0;transition:background-color .15s,color .15s}
+  a.live:hover{background:var(--accent);color:var(--bg)}
 
   /* ---------- publications ---------- */
   .pub{padding:14px 0;border-top:1px solid var(--line);font-size:.93rem}
@@ -210,7 +234,8 @@
     background:var(--bg);border:1px solid var(--muted);
   }
 
-  /* gentle scroll reveal — class added by JS, skipped under reduced motion */
+  /* gentle scroll reveal, per item — classes added and later removed by JS,
+     skipped under reduced motion */
   @media (prefers-reduced-motion: no-preference){
     .reveal{opacity:0;transform:translateY(12px);
       transition:opacity .55s ease,transform .55s ease}
@@ -224,6 +249,8 @@
     }
     .reveal{opacity:1 !important;transform:none !important}
     #trails,.topnav,.skip{display:none !important}
+    .topbar{position:static;background:none}
+    body{padding-top:0}
     body{font-size:12.5px;line-height:1.55}
     section{padding:22px 0}
     .proj{break-inside:avoid;page-break-inside:avoid;box-shadow:none !important;
@@ -669,37 +696,114 @@
 <script>
 document.getElementById('yr').textContent = new Date().getFullYear();
 
-/* Gentle scroll reveal for sections. Class is only added when JS runs and motion
-   is allowed, so content is never hidden if either is missing. */
+var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Sticky top bar: a hairline appears once the page has scrolled, and the nav
+   marks whichever section sits under a line 40% down the viewport. One
+   rAF-throttled passive scroll listener; nothing is written unless it changes. */
 (function () {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if (!('IntersectionObserver' in window)) return;
-  var obs = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
-    });
-  }, { rootMargin: '0px 0px -8% 0px' });
-  document.querySelectorAll('main section').forEach(function (s) {
-    s.classList.add('reveal');
-    obs.observe(s);
+  var bar = document.querySelector('.topbar'), nav = document.querySelector('.topnav');
+  if (!bar || !nav) return;
+  var secs = Array.prototype.slice.call(document.querySelectorAll('main section[id]'));
+  var links = {}, current = null, ticking = false;
+  nav.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    links[a.getAttribute('href').slice(1)] = a;
   });
+
+  function mark(id) {
+    if (id === current) return;
+    if (current && links[current]) links[current].removeAttribute('aria-current');
+    current = id;
+    var a = id && links[id];
+    if (!a) return;
+    a.setAttribute('aria-current', 'location');
+    if (nav.scrollWidth > nav.clientWidth) {           // phone: keep it in view
+      nav.scrollTo({
+        left: a.offsetLeft - (nav.clientWidth - a.offsetWidth) / 2,
+        behavior: reduceMotion ? 'auto' : 'smooth'
+      });
+    }
+  }
+
+  function update() {
+    ticking = false;
+    bar.classList.toggle('stuck', window.scrollY > 24);
+    var id = null;
+    if (window.scrollY > 24 &&
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+      id = secs.length ? secs[secs.length - 1].id : null;   // bottom of page
+    } else {
+      var line = window.innerHeight * 0.4;
+      for (var i = 0; i < secs.length; i++) {
+        var r = secs[i].getBoundingClientRect();
+        if (r.top <= line && r.bottom > line) { id = secs[i].id; break; }
+      }
+    }
+    mark(id);
+  }
+  function request() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  window.addEventListener('scroll', request, { passive: true });
+  window.addEventListener('resize', request);
+  update();
+})();
+
+/* Scroll reveal, one item at a time. Items that enter together are staggered;
+   anything already scrolled past is shown at once. The classes are removed
+   when the fade finishes, so cards get their own hover transitions back.
+   Only added when JS runs and motion is allowed, so content is never hidden
+   if either is missing. */
+(function () {
+  if (reduceMotion || !('IntersectionObserver' in window)) return;
+  var items = document.querySelectorAll(
+    'main section .sechead, .role, main section .proj, main section .pub,' +
+    'main section .talks, .kit, .outro .wrap > p, .links');
+
+  function done(el) {
+    el.classList.remove('reveal', 'in');
+    el.style.transitionDelay = '';
+  }
+  var obs = new IntersectionObserver(function (entries) {
+    var n = 0;
+    entries.forEach(function (e) {
+      var el = e.target;
+      if (e.isIntersecting) {
+        var d = Math.min(n++, 6) * 70;
+        el.style.transitionDelay = d + 'ms';
+        el.classList.add('in');
+        obs.unobserve(el);
+        setTimeout(done, d + 650, el);
+      } else if (e.boundingClientRect.bottom < 0) {
+        done(el);
+        obs.unobserve(el);
+      }
+    });
+  }, { rootMargin: '0px 0px -6% 0px' });
+  items.forEach(function (el) { el.classList.add('reveal'); obs.observe(el); });
 })();
 
 /* Decorative background for the intro: a bubble-chamber event display.
    Collisions produce sprays of charged tracks from a shared vertex; positive and
    negative particles curve opposite ways in the field, lower-momentum tracks
    curve harder, and some decay in flight with a visible kink. Deliberately
-   faint — it should read as texture, not as a graphic. Pauses off-screen;
-   disabled under reduced-motion. */
+   faint — it should read as texture, not as a graphic.
+
+   The physics runs on a fixed 60 Hz step, decoupled from the display: a 120 Hz
+   screen draws in-between positions rather than running twice as fast, and a
+   slow frame catches up instead of slowing down. Each track's tail fades along
+   its length. Pauses off-screen; disabled under reduced-motion. */
 (function () {
   var canvas = document.getElementById('trails');
-  if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (!canvas || reduceMotion) {
     if (canvas) canvas.style.display = 'none';
     return;
   }
 
   var ctx = canvas.getContext('2d');
-  var W = 0, H = 0, tracks = [], flashes = [], raf = null, rgb = '176,74,36';
+  var wrap = document.querySelector('.introwrap');
+  var STEP = 1000 / 60, MAXPTS = 90, BANDS = 6;
+  var W = 0, H = 0, bw = 0, bh = 0, ox = 0, oy = 0;
+  var tracks = [], flashes = [], raf = null, last = 0, acc = 0;
+  var color = 'rgb(176,74,36)';
 
   // Pull the accent colour out of CSS so light/dark mode stay in sync.
   function readAccent() {
@@ -707,17 +811,33 @@ document.getElementById('yr').textContent = new Date().getFullYear();
     var m = v.match(/^#?([0-9a-f]{6})$/i);
     if (m) {
       var n = parseInt(m[1], 16);
-      rgb = [(n >> 16) & 255, (n >> 8) & 255, n & 255].join(',');
+      color = 'rgb(' + [(n >> 16) & 255, (n >> 8) & 255, n & 255].join(',') + ')';
     }
   }
 
+  // Re-measure; only reallocate the backing store when its pixel size really
+  // changed (a phone's address bar hiding fires resize without changing it).
   function resize() {
-    var dpr = window.devicePixelRatio || 1;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var r = canvas.getBoundingClientRect();
+    ox = r.left + window.scrollX;
+    oy = r.top + window.scrollY;
     W = r.width; H = r.height;
-    canvas.width = Math.max(1, W * dpr);
-    canvas.height = Math.max(1, H * dpr);
+    var w = Math.max(1, Math.round(W * dpr)), h = Math.max(1, Math.round(H * dpr));
+    if (w === bw && h === bh) return;
+    bw = canvas.width = w;
+    bh = canvas.height = h;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.lineJoin = 'round';
+  }
+
+  function addTrack(x, y, a, curve, speed, max, kink) {
+    var t = {
+      x: x, y: y, a: a, curve: curve, speed: speed, life: 0, max: max, kink: kink,
+      px: new Float32Array(MAXPTS), py: new Float32Array(MAXPTS), n: 1, h: 0
+    };
+    t.px[0] = x; t.py[0] = y;
+    tracks.push(t);
   }
 
   // One collision: several charged tracks share a vertex.
@@ -727,16 +847,12 @@ document.getElementById('yr').textContent = new Date().getFullYear();
     for (var i = 0; i < n; i++) {
       var speed = 0.5 + Math.random() * 1.3;          // momentum
       var charge = Math.random() < 0.5 ? 1 : -1;      // sets the sense of curvature
-      tracks.push({
-        x: x, y: y,
-        a: base + (i / n) * Math.PI * 2 + (Math.random() - 0.5) * 0.9,
-        curve: charge * (0.012 + 0.045 / speed) * (0.55 + Math.random() * 0.9),
-        speed: speed,
-        life: 0,
-        max: 100 + Math.random() * 160,
-        kink: Math.random() < 0.3 ? Math.round(30 + Math.random() * 60) : -1,
-        pts: [[x, y]]
-      });
+      addTrack(x, y,
+        base + (i / n) * Math.PI * 2 + (Math.random() - 0.5) * 0.9,
+        charge * (0.012 + 0.045 / speed) * (0.55 + Math.random() * 0.9),
+        speed,
+        100 + Math.random() * 160,
+        Math.random() < 0.3 ? Math.round(30 + Math.random() * 60) : -1);
     }
     flashes.push({ x: x, y: y, age: 0 });
   }
@@ -747,24 +863,10 @@ document.getElementById('yr').textContent = new Date().getFullYear();
             Math.random() < 0.4);
   }
 
-  function step() {
-    ctx.clearRect(0, 0, W, H);
-
-    // vertex flashes: a brief expanding ring where the collision happened
+  // Advance the simulation by exactly one 60 Hz step.
+  function tick() {
     for (var f = flashes.length - 1; f >= 0; f--) {
-      var v = flashes[f];
-      v.age++;
-      var k = 1 - v.age / 28;
-      if (k <= 0) { flashes.splice(f, 1); continue; }
-      ctx.beginPath();
-      ctx.arc(v.x, v.y, 2 + (1 - k) * 8, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(' + rgb + ',' + (k * 0.25).toFixed(3) + ')';
-      ctx.lineWidth = 1;
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(v.x, v.y, 1.6, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(' + rgb + ',' + (k * 0.45).toFixed(3) + ')';
-      ctx.fill();
+      if (++flashes[f].age >= 28) flashes.splice(f, 1);
     }
 
     for (var i = tracks.length - 1; i >= 0; i--) {
@@ -783,30 +885,90 @@ document.getElementById('yr').textContent = new Date().getFullYear();
         if (Math.random() < 0.5) flashes.push({ x: t.x, y: t.y, age: 10 });
       }
 
-      t.pts.push([t.x, t.y]);
-      if (t.pts.length > 90) t.pts.shift();
-
-      var fade = 1 - t.life / t.max;
-      if (fade <= 0 || t.x < -80 || t.x > W + 80 || t.y < -80 || t.y > H + 80) {
+      if (t.life >= t.max || t.x < -80 || t.x > W + 80 || t.y < -80 || t.y > H + 80) {
         tracks.splice(i, 1);
         continue;
       }
 
-      ctx.beginPath();
-      ctx.moveTo(t.pts[0][0], t.pts[0][1]);
-      for (var p = 1; p < t.pts.length; p++) ctx.lineTo(t.pts[p][0], t.pts[p][1]);
-      ctx.strokeStyle = 'rgba(' + rgb + ',' + (fade * 0.16).toFixed(3) + ')';
-      ctx.lineWidth = 0.7 + Math.min(t.speed, 1.6) * 0.4;   // heavier line = more momentum
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.arc(t.x, t.y, 1.2, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(' + rgb + ',' + (fade * 0.38).toFixed(3) + ')';
-      ctx.fill();
+      // ring buffer of recent positions (no per-step allocation)
+      var k = (t.h + t.n) % MAXPTS;
+      t.px[k] = t.x; t.py[k] = t.y;
+      if (t.n < MAXPTS) t.n++; else t.h = (t.h + 1) % MAXPTS;
     }
 
     if (tracks.length < 22 && Math.random() < 0.03) spawn();
-    raf = requestAnimationFrame(step);
+  }
+
+  // Draw the current state, `frac` of a step past the last tick.
+  function draw(frac) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+
+    // vertex flashes: a brief expanding ring where the collision happened
+    ctx.lineWidth = 1;
+    for (var f = 0; f < flashes.length; f++) {
+      var v = flashes[f], k = 1 - (v.age + frac) / 28;
+      if (k <= 0) continue;
+      ctx.globalAlpha = k * 0.25;
+      ctx.beginPath();
+      ctx.arc(v.x, v.y, 2 + (1 - k) * 8, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.globalAlpha = k * 0.45;
+      ctx.beginPath();
+      ctx.arc(v.x, v.y, 1.6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    for (var i = 0; i < tracks.length; i++) {
+      var t = tracks[i];
+      var fade = 1 - (t.life + frac) / t.max;
+      if (fade <= 0) continue;
+
+      // where the head will be `frac` of the way into the next step
+      var a = t.a + t.curve * frac;
+      var hx = t.x + Math.cos(a) * t.speed * frac;
+      var hy = t.y + Math.sin(a) * t.speed * frac;
+
+      ctx.lineWidth = 0.7 + Math.min(t.speed, 1.6) * 0.4;   // heavier line = more momentum
+
+      // tail in bands, oldest first, each a little stronger than the last
+      for (var b = 0; b < BANDS; b++) {
+        var i0 = Math.floor((t.n - 1) * b / BANDS);
+        var i1 = Math.floor((t.n - 1) * (b + 1) / BANDS);
+        var head = b === BANDS - 1;
+        if (i1 <= i0 && !head) continue;
+        var w = (b + 1) / BANDS;
+        ctx.globalAlpha = fade * 0.19 * w * Math.sqrt(w);
+        ctx.beginPath();
+        var j = (t.h + i0) % MAXPTS;
+        ctx.moveTo(t.px[j], t.py[j]);
+        for (var p = i0 + 1; p <= i1; p++) {
+          j = (t.h + p) % MAXPTS;
+          ctx.lineTo(t.px[j], t.py[j]);
+        }
+        if (head) ctx.lineTo(hx, hy);
+        ctx.stroke();
+      }
+
+      ctx.globalAlpha = fade * 0.38;
+      ctx.beginPath();
+      ctx.arc(hx, hy, 1.2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function frame(now) {
+    raf = requestAnimationFrame(frame);
+    var dt = last ? now - last : STEP;
+    last = now;
+    if (dt > 250) dt = STEP;                 // came back from a pause: don't fast-forward
+    acc += dt;
+    var n = 0;
+    while (acc >= STEP && n < 4) { tick(); acc -= STEP; n++; }
+    if (acc >= STEP) acc %= STEP;
+    draw(acc / STEP);
   }
 
   /* Cursor interaction: the pointer behaves like a charged particle passing
@@ -814,53 +976,44 @@ document.getElementById('yr').textContent = new Date().getFullYear();
      tracks, and clicking empty space triggers a collision at that point.
      Listeners sit on the wrapper (the canvas ignores pointer events), nothing
      is prevented, so links, text selection and scrolling are untouched. */
-  var wrap = document.querySelector('.introwrap');
   var lastT = 0, lx = -1, ly = -1;
 
-  function local(e) {
-    var r = canvas.getBoundingClientRect();
-    return [e.clientX - r.left, e.clientY - r.top];
-  }
-
   wrap.addEventListener('pointermove', function (e) {
-    var p = local(e), x = p[0], y = p[1];
+    var x = e.pageX - ox, y = e.pageY - oy;
     if (lx < 0) { lx = x; ly = y; return; }
     var moved = Math.hypot(x - lx, y - ly);
-    var now = performance.now();
     if (moved > 16) {
+      var now = performance.now();
       if (now - lastT > 110 && tracks.length < 40) {
         lastT = now;
-        var ang = Math.atan2(y - ly, x - lx) + (Math.random() - 0.5) * 0.7;
-        tracks.push({
-          x: x, y: y, a: ang,
-          curve: (Math.random() < 0.5 ? 1 : -1) * (0.025 + Math.random() * 0.04),
-          speed: 0.9 + Math.random() * 0.8,
-          life: 0, max: 55 + Math.random() * 55, kink: -1,
-          pts: [[x, y]]
-        });
+        addTrack(x, y,
+          Math.atan2(y - ly, x - lx) + (Math.random() - 0.5) * 0.7,
+          (Math.random() < 0.5 ? 1 : -1) * (0.025 + Math.random() * 0.04),
+          0.9 + Math.random() * 0.8,
+          55 + Math.random() * 55, -1);
       }
       lx = x; ly = y;
     }
-  });
+  }, { passive: true });
 
   wrap.addEventListener('pointerdown', function (e) {
     if (e.target.closest('a')) return;           // never hijack a link
     if (tracks.length > 46) return;
-    var p = local(e);
-    collide(p[0], p[1], true);
-  });
+    collide(e.pageX - ox, e.pageY - oy, true);
+  }, { passive: true });
 
   readAccent();
   resize();
-  for (var k = 0; k < 3; k++) spawn();
+  for (var s = 0; s < 3; s++) spawn();
 
   window.addEventListener('resize', resize);
+  if ('ResizeObserver' in window) new ResizeObserver(resize).observe(wrap);
   var scheme = window.matchMedia('(prefers-color-scheme: dark)');
   (scheme.addEventListener ? scheme.addEventListener.bind(scheme, 'change') : scheme.addListener.bind(scheme))(readAccent);
 
   new IntersectionObserver(function (e) {
-    if (e[0].isIntersecting) { if (!raf) raf = requestAnimationFrame(step); }
-    else if (raf) { cancelAnimationFrame(raf); raf = null; }
+    if (e[0].isIntersecting) { if (!raf) raf = requestAnimationFrame(frame); }
+    else if (raf) { cancelAnimationFrame(raf); raf = null; last = 0; }
   }).observe(canvas);
 })();
 </script>
